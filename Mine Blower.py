@@ -4,7 +4,7 @@ import time
 
 #The emojis!
 death_expanded = u"\u2620\uFE0F"
-death = "☠️" 
+death = "☠️"
 warning_expanded = u"\u26A0\uFE0F"
 warning = "⚠️"
 clock = "⏱"
@@ -16,7 +16,7 @@ def update_clock():
     timer_label.configure(text=clock +str(time_played))
     if not gameOver:
         window.after(1000, update_clock)
-    
+
 def init():
     global gameOver
     global score
@@ -31,13 +31,13 @@ def init():
     time_played = 0
     first_click = True
     bombs_left = 0
-    
+
 def play_bombdodger():
     init()
     global window
     create_bombfield()
     window = tkinter.Tk()
-    window.geometry("620x650")       
+    window.geometry("620x650")
     layout_window(window)
     window.after(1000, update_clock)
     window.mainloop()
@@ -57,7 +57,7 @@ def create_bombfield():
             if random.randint(1,100) < 20:
                 rowList.append(1)
                 bombs_left = bombs_left + 1
-                
+
             else:
                 rowList.append(0)
                 squaresToClear = squaresToClear + 1
@@ -66,14 +66,14 @@ def create_bombfield():
 
 def printfield(bombfield):
     for rowList in bombfield:
-        print(rowList)  
+        print(rowList)
 
 def restart():
     show("Restart!")
     window.destroy()
     play_bombdodger()
     window.mainloop()
-        
+
 def layout_window(window):
 
     global main_frame
@@ -95,7 +95,7 @@ def layout_window(window):
     bombs_label = tkinter.Label(top_frame, text="Bombs left", fg="black", font=("Phosphate", 18))
     bombs_label.grid(row=0, column=2)
     show_bombs_left()
-    
+
     restart_button = tkinter.Button(top_frame, text ="Retry", command = restart)
     restart_button.grid(row=0, column=3)
 
@@ -122,21 +122,21 @@ def on_click(event):
     global squaresToClear
     global first_click
     global main_frame
-    
+
     square = event.widget
     row = int(square.grid_info()["row"])
     column = int(square.grid_info()["column"])
 
     currentText = square.cget("text")
-   
+
     if gameOver == False:
         if first_click:
             #Ensure first click is never a bomb!
             first_click = False
             while bombfield[row][column] == 1:
                  create_bombfield()
-        
-             
+
+
         if warning in currentText:
             pass
         elif bombfield[row][column] == 1:
@@ -194,7 +194,7 @@ def on_click(event):
             else:
                 num_text = ""
 
-            square.config(text = " " + num_text + " ")                
+            square.config(text = " " + num_text + " ")
 
             squaresToClear = squaresToClear - 1
             score = score + 1
@@ -212,7 +212,7 @@ def on_right_click(event):
     global bombs_left
     square = event.widget
     currentText = square.cget("text")
-    
+
     if warning in currentText:
         square.config(bg = "green", text = "", height=4, width=8, font=("Arial", 12))
         bombs_left = bombs_left + 1
@@ -221,8 +221,8 @@ def on_right_click(event):
         column = int(square.grid_info()["column"])
         square.config(bg = "white", height=1, width=1, text = warning, font=("Arial", 28))
         bombs_left = bombs_left - 1
-        
+
     show_bombs_left()
 
-    
+
 play_bombdodger()

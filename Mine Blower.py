@@ -107,7 +107,7 @@ def layout_window(window):
                 bgcolor = "seagreen"
             else:
                 bgcolor = "green"
-            square = tkinter.Label(main_frame, bg = bgcolor, height=4, width=8, font=("Arial", 12))
+            square = tkinter.Label(main_frame, relief="raised", bg = bgcolor, height=4, width=8, font=("Arial", 12))
             square.grid(row = rowNumber, column = columnNumber)
             square.grid(row = rowNumber, column = columnNumber)
             square.bind("<Button-1>", on_click)

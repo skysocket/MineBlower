@@ -107,7 +107,7 @@ def layout_window(window):
                 bgcolor = "seagreen"
             else:
                 bgcolor = "green"
-            square = tkinter.Label(main_frame, relief="raised", bg = bgcolor, height=4, width=8, font=("Arial", 12))
+            square = tkinter.Label(main_frame, relief="raised", bg = bgcolor, height=1, width=2, font=("Arial", 20))
             square.grid(row = rowNumber, column = columnNumber)
             square.grid(row = rowNumber, column = columnNumber)
             square.bind("<Button-1>", on_click)
@@ -151,7 +151,7 @@ def on_click(event):
                             bg = "red"
                         else:
                             bg = "#808080"
-                        tk_square.config(bg = bg, text = death, height=1, width=1, font=("Arial", 28))
+                        tk_square.config(bg = bg, text = death, height=1, width=2)
             show("Game Over! Your score was: " + str(score))
 
         elif currentText == "":
@@ -214,12 +214,12 @@ def on_right_click(event):
     currentText = square.cget("text")
 
     if warning in currentText:
-        square.config(bg = "green", text = "", height=4, width=8, font=("Arial", 12))
+        square.config(bg = "green", text = "", height=1, width=2)
         bombs_left = bombs_left + 1
     elif currentText == "":
         row = int(square.grid_info()["row"])
         column = int(square.grid_info()["column"])
-        square.config(bg = "white", height=1, width=1, text = warning, font=("Arial", 28))
+        square.config(bg = "white", height=1, width=2, text = warning)
         bombs_left = bombs_left - 1
 
     show_bombs_left()

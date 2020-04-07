@@ -219,7 +219,7 @@ def on_right_click(event):
     elif currentText == "":
         row = int(square.grid_info()["row"])
         column = int(square.grid_info()["column"])
-        square.config(bg = "white", height=1, width=2, text = warning)
+        square.config(bg = "light blue", height=1, width=2, text = warning)
         bombs_left = bombs_left - 1
 
     show_bombs_left()

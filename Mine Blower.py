@@ -148,9 +148,9 @@ def on_click(event):
                         #print("found bomb")
                         tk_square = main_frame.grid_slaves(row=r, column=c)[0]
                         if r == row and c == column:
-                            bg = "#808080"
-                        else:
                             bg = "red"
+                        else:
+                            bg = "#808080"
                         tk_square.config(bg = bg, text = death, height=1, width=1, font=("Arial", 28))
             show("Game Over! Your score was: " + str(score))
 

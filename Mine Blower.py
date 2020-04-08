@@ -12,10 +12,11 @@ clock = "⏱"
 def update_clock():
     global timer_label
     global time_played
-    time_played = time_played + 1
+    global timer
     timer_label.configure(text=clock +str(time_played))
+    time_played = time_played + 1
     if not gameOver:
-        window.after(1000, update_clock)
+        timer = window.after(1000, update_clock)
 
 def init():
     global gameOver
@@ -39,7 +40,7 @@ def play_bombdodger():
     window = tkinter.Tk()
     window.geometry("620x650")
     layout_window(window)
-    window.after(1000, update_clock)
+    update_clock()
     window.mainloop()
 
 def show_bombs_left():
@@ -69,7 +70,9 @@ def printfield(bombfield):
         print(rowList)
 
 def restart():
+    global timer
     show("Restart!")
+    window.after_cancel(timer)
     window.destroy()
     play_bombdodger()
     window.mainloop()

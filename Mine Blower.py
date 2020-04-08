@@ -142,7 +142,7 @@ def on_click(event):
         elif bombfield[row][column] == 1:
             gameOver = True
             red = "#FF6040"
-            for r in range(0,170):
+            for r in range(0,10):
                 for c in range(0,10):
                     if bombfield[r][c] == 1:
                         #print("found bomb")

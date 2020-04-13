@@ -9,6 +9,17 @@ warning_expanded = u"\u26A0\uFE0F"
 warning = "⚠️"
 clock = "⏱"
 
+def click(r, c, text, auto=True):
+    tk_square = main_frame.grid_slaves(row=r, column=c)[0]
+    if text == death:
+        if auto == False:
+            bg = "red"
+        else:
+            bg = "#808080"
+    else:
+        bg = "light blue"
+    tk_square.config(bg = bg, text = text, height=1, width=2)
+
 def update_clock():
     global timer_label
     global time_played
@@ -148,17 +159,10 @@ def on_click(event):
             for r in range(0,10):
                 for c in range(0,10):
                     if bombfield[r][c] == 1:
-                        #print("found bomb")
-                        tk_square = main_frame.grid_slaves(row=r, column=c)[0]
-                        if r == row and c == column:
-                            bg = "red"
-                        else:
-                            bg = "#808080"
-                        tk_square.config(bg = bg, text = death, height=1, width=2)
+                        click(r, c, text=death, auto = (r != row or c != column))
             show("Game Over! Your score was: " + str(score))
 
         elif currentText == "":
-            square.config(bg = "light blue")
             totalBombs = 0
 
             if row < 9:
@@ -196,8 +200,9 @@ def on_click(event):
                 num_text = str(totalBombs)
             else:
                 num_text = ""
+                
+            click(row, column, text = " " + num_text + " ", auto=False)   
 
-            square.config(text = " " + num_text + " ")
 
             squaresToClear = squaresToClear - 1
             score = score + 1

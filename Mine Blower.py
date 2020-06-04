@@ -32,14 +32,14 @@ def update_clock():
 def init():
     global gameOver
     global score
-    global squaresToClear
+    global squares_left
     global bombfield
     global time_played
     global first_click
     global bombs_left
     gameOver = False
     score = 0
-    squaresToClear = 0
+    squares_left = 0
     time_played = 0
     first_click = True
     bombs_left = 0
@@ -59,7 +59,7 @@ def show_bombs_left():
     bombs_label.config(text="Bombs left " + str(bombs_left))
 
 def create_bombfield():
-    global squaresToClear
+    global squares_left
     global bombfield
     global bombs_left
     bombfield = []
@@ -72,7 +72,7 @@ def create_bombfield():
 
             else:
                 rowList.append(0)
-                squaresToClear = squaresToClear + 1
+            squares_left = squares_left + 1
         bombfield.append(rowList)
     #printfield(bombfield)
 
@@ -130,10 +130,19 @@ def layout_window(window):
 def show(text):
     score_label.config(text = text)
 
+def check_game_over():
+    global squares_left
+    global gameOver
+    global score
+    
+    if squares_left == 0:
+        gameOver = True
+        show("Congratulations! Your score was: " + str(score))
+
 def on_click(event):
     global score
     global gameOver
-    global squaresToClear
+    global squares_left
     global first_click
     global main_frame
 
@@ -204,32 +213,34 @@ def on_click(event):
             click(row, column, text = " " + num_text + " ", auto=False)   
 
 
-            squaresToClear = squaresToClear - 1
+            squares_left = squares_left - 1
             score = score + 1
 
             show("Score: " + str(score))
 
-            if squaresToClear == 0:
-                gameOver = True
-                show("Congratulations! Your score was: " + str(score))
+            check_game_over()
 
             if totalBombs == 0:
                 print("should clear all squares around this")
 
 def on_right_click(event):
     global bombs_left
+    global squares_left
     square = event.widget
     currentText = square.cget("text")
 
     if warning in currentText:
         square.config(bg = "green", text = "", height=1, width=2)
         bombs_left = bombs_left + 1
+        squares_left = squares_left + 1
     elif currentText == "":
         row = int(square.grid_info()["row"])
         column = int(square.grid_info()["column"])
         square.config(bg = "light blue", height=1, width=2, text = warning)
         bombs_left = bombs_left - 1
-
+        squares_left = squares_left - 1
+        check_game_over()
+        
     show_bombs_left()
 
 

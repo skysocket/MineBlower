@@ -236,6 +236,8 @@ def on_click(event):
 def on_right_click(event):
     global bombs_left
     global squares_left
+    global first_click
+    
     square = event.widget
     currentText = square.cget("text")
 
@@ -243,7 +245,7 @@ def on_right_click(event):
         square.config(bg = "green", text = "", height=1, width=2)
         bombs_left = bombs_left + 1
         squares_left = squares_left + 1
-    elif currentText == "":
+    elif currentText == "" and not first_click and bombs_left > 0:
         row = int(square.grid_info()["row"])
         column = int(square.grid_info()["column"])
         square.config(bg = "light blue", height=1, width=2, text = warning)

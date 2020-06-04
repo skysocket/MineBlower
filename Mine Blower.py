@@ -36,17 +36,15 @@ def init():
     global bombfield
     global time_played
     global first_click
-    global bombs_left
     gameOver = False
     score = 0
     squares_left = 0
     time_played = 0
     first_click = True
-    bombs_left = 0
 
 def play_bombdodger():
-    init()
     global window
+    init()
     create_bombfield()
     window = tkinter.Tk()
     window.geometry("620x650")
@@ -56,12 +54,24 @@ def play_bombdodger():
 
 def show_bombs_left():
     global bombs_label
-    bombs_label.config(text="Bombs left " + str(bombs_left))
+    global bombs_left
+    global first_click
+
+    if first_click:
+        # Never change number upon first click
+        number = "??"
+    else:
+        number = bombs_left
+        
+    bombs_label.config(text="Bombs left " + str(number))
 
 def create_bombfield():
     global squares_left
     global bombfield
     global bombs_left
+
+    bombs_left = 0
+    
     bombfield = []
     for row in range(0,10):
         rowList = []
@@ -69,7 +79,6 @@ def create_bombfield():
             if random.randint(1,100) < 20:
                 rowList.append(1)
                 bombs_left = bombs_left + 1
-
             else:
                 rowList.append(0)
             squares_left = squares_left + 1
@@ -158,6 +167,7 @@ def on_click(event):
             first_click = False
             while bombfield[row][column] == 1:
                  create_bombfield()
+            show_bombs_left()
 
 
         if warning in currentText:

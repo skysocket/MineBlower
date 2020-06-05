@@ -1,6 +1,7 @@
 import tkinter
 import random
 import time
+import platform
 
 #The emojis!
 death_expanded = u"\u2620\uFE0F"
@@ -134,7 +135,12 @@ def layout_window(window):
             square.grid(row = rowNumber, column = columnNumber)
             square.grid(row = rowNumber, column = columnNumber)
             square.bind("<Button-1>", on_click)
-            square.bind("<Button-2>",on_right_click)
+            square.bind("<Control-Button-1>", on_right_click)
+            if platform.system() == "Darwin":
+                square.bind("<Button-2>", on_right_click)
+            else:
+                square.bind("<Button-2>", on_click)
+                square.bind("<Button-3>", on_right_click)
 
 def show(text):
     score_label.config(text = text)

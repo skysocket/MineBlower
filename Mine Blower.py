@@ -152,6 +152,31 @@ def check_game_over():
         gameOver = True
         show("Congratulations! Your score was: " + str(score))
 
+def surrounding_squares(row, column):
+    max_row = 9
+    max_col = 9
+
+    squares = []
+
+    if row < max_row:
+        squares.append((row+1, column))
+    if row > 0:
+        squares.append((row-1, column))
+    if column > 0:
+        squares.append((row, column-1))
+    if column < max_col:
+        squares.append((row, column+1))
+    if row > 0 and column > 0:
+        squares.append((row-1, column-1))
+    if row < max_row and column > 0:
+        squares.append((row+1, column-1))
+    if row > 0 and column < max_col:
+        squares.append((row-1, column+1))
+    if row < max_row and column < max_col:
+        squares.append((row+1, column+1))
+
+    return squares
+
 def on_click(event):
     global score
     global gameOver
@@ -188,36 +213,10 @@ def on_click(event):
         elif currentText == "":
             totalBombs = 0
 
-            if row < 9:
-                if bombfield[row+1][column] == 1:
-                    totalBombs = totalBombs + 1
+            squares_to_count = surrounding_squares(row, column)
 
-            if row > 0:
-                if bombfield[row-1][column] == 1:
-                    totalBombs = totalBombs + 1
-
-            if column > 0:
-                if bombfield[row][column-1] == 1:
-                    totalBombs =totalBombs + 1
-
-            if column < 9:
-                if bombfield[row][column+1] == 1:
-                    totalBombs = totalBombs + 1
-
-            if row > 0 and column > 0:
-                if bombfield[row-1][column-1] == 1:
-                    totalBombs = totalBombs + 1
-
-            if row < 9 and column > 0:
-                if bombfield[row+1][column-1] == 1:
-                    totalBombs = totalBombs + 1
-            if row > 0 and column < 9:
-                if bombfield[row-1][column+1] == 1:
-                    totalBombs = totalBombs +1
-
-            if row < 9 and column < 9:
-                if bombfield[row+1][column+1] == 1:
-                    totalBombs = totalBombs + 1
+            for r,c in squares_to_count:
+                totalBombs += bombfield[r][c]
 
             if totalBombs != 0:
                 num_text = str(totalBombs)

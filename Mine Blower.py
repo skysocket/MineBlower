@@ -33,13 +33,10 @@ def update_clock():
 def init():
     global gameOver
     global score
-    global squares_left
-    global bombfield
     global time_played
     global first_click
     gameOver = False
     score = 0
-    squares_left = 0
     time_played = 0
     first_click = True
 
@@ -72,8 +69,9 @@ def create_bombfield():
     global bombs_left
 
     bombs_left = 0
-    
+    squares_left = 0
     bombfield = []
+    
     for row in range(0,10):
         rowList = []
         for column in range(0,10):

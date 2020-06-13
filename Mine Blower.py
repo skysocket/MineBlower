@@ -10,7 +10,7 @@ warning_expanded = u"\u26A0\uFE0F"
 warning = "⚠️"
 clock = "⏱"
 
-def click(r, c, text, auto=True):
+def square_open(r, c, text, auto=True):
     tk_square = main_frame.grid_slaves(row=r, column=c)[0]
     if text == death:
         if auto == False:
@@ -178,13 +178,16 @@ def surrounding_squares(row, column):
     return squares
 
 def on_click(event):
+    square = event.widget
+    click(square)
+    
+def click(square, auto=False):
     global score
     global gameOver
     global squares_left
     global first_click
     global main_frame
 
-    square = event.widget
     row = int(square.grid_info()["row"])
     column = int(square.grid_info()["column"])
 
@@ -200,22 +203,24 @@ def on_click(event):
 
 
         if warning in currentText:
-            pass
+            if auto==True:
+                right_click(square)
+                click(square)
         elif bombfield[row][column] == 1:
             gameOver = True
             red = "#FF6040"
             for r in range(0,10):
                 for c in range(0,10):
                     if bombfield[r][c] == 1:
-                        click(r, c, text=death, auto = (r != row or c != column))
+                        square_open(r, c, text=death, auto = (r != row or c != column))
             show("Game Over! Your score was: " + str(score))
 
         elif currentText == "":
             totalBombs = 0
 
-            squares_to_count = surrounding_squares(row, column)
+            squares_around = surrounding_squares(row, column)
 
-            for r,c in squares_to_count:
+            for r,c in squares_around:
                 totalBombs += bombfield[r][c]
 
             if totalBombs != 0:
@@ -223,7 +228,7 @@ def on_click(event):
             else:
                 num_text = ""
                 
-            click(row, column, text = " " + num_text + " ", auto=False)   
+            square_open(row, column, text = " " + num_text + " ", auto=False)   
 
 
             squares_left = squares_left - 1
@@ -234,14 +239,20 @@ def on_click(event):
             check_game_over()
 
             if totalBombs == 0:
-                print("should clear all squares around this")
-
+                for r,c in squares_around:
+                    tk_square = main_frame.grid_slaves(row=r, column=c)[0]
+                    click(tk_square, auto=True)
+                    
+                    
 def on_right_click(event):
+    square = event.widget
+    right_click(square)
+
+def right_click(square):
     global bombs_left
     global squares_left
     global first_click
     
-    square = event.widget
     currentText = square.cget("text")
 
     if warning in currentText:

@@ -10,8 +10,14 @@ warning_expanded = u"\u26A0\uFE0F"
 warning = "⚠️"
 clock = "⏱"
 
+def square_to_widget(row, column):
+    global main_frame
+    
+    widget = main_frame.grid_slaves(row, column)[0]
+    return widget
+
 def square_open(r, c, text, auto=True):
-    tk_square = main_frame.grid_slaves(row=r, column=c)[0]
+    tk_square = square_to_widget(r, c)
     if text == death:
         if auto == False:
             bg = "red"
@@ -181,7 +187,7 @@ def on_click(event):
     square = event.widget
     click(square)
     
-def click(square, auto=False):
+def click(square, auto=False, click_flag=False):
     global score
     global gameOver
     global squares_left
@@ -203,7 +209,7 @@ def click(square, auto=False):
 
 
         if warning in currentText:
-            if auto==True:
+            if click_flag==True:
                 right_click(square)
                 click(square)
         elif bombfield[row][column] == 1:
@@ -240,7 +246,19 @@ def click(square, auto=False):
 
             if totalBombs == 0:
                 for r,c in squares_around:
-                    tk_square = main_frame.grid_slaves(row=r, column=c)[0]
+                    tk_square = square_to_widget(r, c)
+                    click(tk_square, auto=True, click_flag=True)
+        elif auto == False:  # clicking on a number
+            squares_around = surrounding_squares(row, column)
+            flag_count = 0
+            for r,c in squares_around:
+                tk_square = square_to_widget(r, c)
+                square_text = tk_square.cget("text")
+                if warning in square_text:
+                    flag_count = flag_count + 1   
+            if int(currentText) == flag_count:
+                for r,c in squares_around:
+                    tk_square = square_to_widget(r, c)
                     click(tk_square, auto=True)
                     
                     

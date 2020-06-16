@@ -4,10 +4,10 @@ import time
 import platform
 
 #The emojis!
-death_expanded = u"\u2620\uFE0F"
-death = "☠️"
 warning_expanded = u"\u26A0\uFE0F"
 warning = "⚠️"
+death_expanded = u"\u2620\uFE0F"
+death = "☠️"
 clock = "⏱"
 
 def square_to_widget(row, column):
@@ -17,6 +17,8 @@ def square_to_widget(row, column):
     return widget
 
 def square_open(r, c, text, auto=True):
+    global first_mine
+    
     tk_square = square_to_widget(r, c)
     if text == death:
         if auto == False:
@@ -25,6 +27,12 @@ def square_open(r, c, text, auto=True):
             bg = "#808080"
     else:
         bg = "light blue"
+    if text == death and first_mine:
+        # Avoid tkinter (3.7.3) on windows bug
+        # when displaying skull with emoji variant selector.
+        # Displaying warning (with variant selector) first, avoids the issue.
+        first_mine = False
+        tk_square.config(bg = bg, text = warning, height=1, width=2)
     tk_square.config(bg = bg, text = text, height=1, width=2)
 
 def update_clock():
@@ -41,10 +49,12 @@ def init():
     global score
     global time_played
     global first_click
+    global first_mine
     gameOver = False
     score = 0
     time_played = 0
     first_click = True
+    first_mine = True
 
 def play_bombdodger():
     global window

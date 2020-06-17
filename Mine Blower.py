@@ -46,12 +46,10 @@ def update_clock():
 
 def init():
     global gameOver
-    global score
     global time_played
     global first_click
     global first_mine
     gameOver = False
-    score = 0
     time_played = 0
     first_click = True
     first_mine = True
@@ -106,7 +104,6 @@ def printfield(bombfield):
 
 def restart():
     global timer
-    show("Restart!")
     window.after_cancel(timer)
     window.destroy()
     play_bombdodger()
@@ -120,10 +117,6 @@ def layout_window(window):
 
     top_frame.grid(row=0, sticky="")
     main_frame.grid(row=1, sticky="nsew")
-
-    global score_label
-    score_label = tkinter.Label(top_frame, text="SCORE", fg="black", font=("Phosphate", 18))
-    score_label.grid(row=0, column=0)
 
     global timer_label
     timer_label = tkinter.Label(top_frame, text="0", fg="black", font=("Phosphate", 18))
@@ -156,17 +149,12 @@ def layout_window(window):
                 square.bind("<Button-2>", on_click)
                 square.bind("<Button-3>", on_right_click)
 
-def show(text):
-    score_label.config(text = text)
-
 def check_game_over():
     global squares_left
     global gameOver
-    global score
     
     if squares_left == 0:
         gameOver = True
-        show("Congratulations! Your score was: " + str(score))
 
 def surrounding_squares(row, column):
     max_row = 9
@@ -198,7 +186,6 @@ def on_click(event):
     click(square)
     
 def click(square, auto=False, click_flag=False):
-    global score
     global gameOver
     global squares_left
     global first_click
@@ -217,7 +204,6 @@ def click(square, auto=False, click_flag=False):
                  create_bombfield()
             show_bombs_left()
 
-
         if warning in currentText:
             if click_flag==True:
                 right_click(square)
@@ -229,13 +215,11 @@ def click(square, auto=False, click_flag=False):
                 for c in range(0,10):
                     if bombfield[r][c] == 1:
                         square_open(r, c, text=death, auto = (r != row or c != column))
-            show("Game Over! Your score was: " + str(score))
 
         elif currentText == "":
             totalBombs = 0
-
+            
             squares_around = surrounding_squares(row, column)
-
             for r,c in squares_around:
                 totalBombs += bombfield[r][c]
 
@@ -246,11 +230,7 @@ def click(square, auto=False, click_flag=False):
                 
             square_open(row, column, text = " " + num_text + " ", auto=False)   
 
-
             squares_left = squares_left - 1
-            score = score + 1
-
-            show("Score: " + str(score))
 
             check_game_over()
 

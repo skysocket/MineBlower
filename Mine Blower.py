@@ -64,10 +64,10 @@ def play_bombdodger():
     init()
     create_bombfield()
     window = tkinter.Tk()
-    window.geometry("620x650")
+    window.title("Mine Blower")
     layout_window(window)
     window.mainloop()
-
+    
 def show_bombs_left():
     global bombs_label
     global bombs_left
@@ -79,7 +79,7 @@ def show_bombs_left():
     else:
         number = bombs_left
         
-    bombs_label.config(text="Bombs left " + str(number))
+    bombs_label.config(text=death + str(number))
 
 def create_bombfield():
     global squares_left
@@ -122,18 +122,21 @@ def layout_window(window):
 
     top_frame.grid(row=0, sticky="")
     main_frame.grid(row=1, sticky="nsew")
-
+   
     global timer_label
-    timer_label = tkinter.Label(top_frame, text="0", fg="black", font=("Phosphate", 18))
-    timer_label.grid(row=0, column=1)
-
+    timer_label = tkinter.Label(top_frame, text=clock + "0", fg="black", font=("Phosphate", 18),
+                                anchor="w", width=5, relief=tkinter.SUNKEN, borderwidth=3)
+    timer_label.grid(row=0, column=0)
+    
+    restart_button = tkinter.Button(top_frame, text ="Retry", command = restart,
+                                    anchor="center", width=5)
+    restart_button.grid(row=0, column=1, padx=(30,30))
+    
     global bombs_label
-    bombs_label = tkinter.Label(top_frame, text="Bombs left", fg="black", font=("Phosphate", 18))
+    bombs_label = tkinter.Label(top_frame, text="", fg="black", font=("Phosphate", 18),
+                                anchor="w", width=5, relief=tkinter.SUNKEN, borderwidth=3)
     bombs_label.grid(row=0, column=2)
     show_bombs_left()
-
-    restart_button = tkinter.Button(top_frame, text ="Retry", command = restart)
-    restart_button.grid(row=0, column=3)
 
     for rowNumber, rowList in enumerate(bombfield):
         for columnNumber, columEntry in enumerate(rowList):

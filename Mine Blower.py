@@ -21,8 +21,11 @@ def square_open(r, c, text, auto=True):
     
     tk_square = square_to_widget(r, c)
     if text == death:
+        square_text = tk_square.cget("text")
         if auto == False:
             bg = "red"
+        elif warning in square_text:
+            bg = "light blue"
         else:
             bg = "#808080"
     else:

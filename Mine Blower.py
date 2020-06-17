@@ -59,12 +59,15 @@ def init():
     first_mine = True
     timer = None
 
-def play_bombdodger():
+def start_bombdodger():
     global window
-    init()
-    create_bombfield()
     window = tkinter.Tk()
     window.title("Mine Blower")
+    play_bombdodger()
+
+def play_bombdodger():
+    init()
+    create_bombfield()
     layout_window(window)
     window.mainloop()
     
@@ -110,12 +113,13 @@ def restart():
     global timer
     if timer:
         window.after_cancel(timer)
-    window.destroy()
+    main_frame.destroy()
+    top_frame.destroy()
     play_bombdodger()
-    window.mainloop()
 
 def layout_window(window):
 
+    global top_frame
     global main_frame
     top_frame = tkinter.Frame(window)
     main_frame = tkinter.Frame(window)
@@ -292,4 +296,4 @@ def right_click(square):
     show_bombs_left()
 
 
-play_bombdodger()
+start_bombdodger()

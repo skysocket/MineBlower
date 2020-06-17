@@ -39,9 +39,9 @@ def update_clock():
     global timer_label
     global time_played
     global timer
-    timer_label.configure(text=clock +str(time_played))
-    time_played = time_played + 1
     if not gameOver:
+        timer_label.configure(text=clock +str(time_played))
+        time_played = time_played + 1
         timer = window.after(1000, update_clock)
 
 def init():
@@ -49,10 +49,12 @@ def init():
     global time_played
     global first_click
     global first_mine
+    global timer
     gameOver = False
     time_played = 0
     first_click = True
     first_mine = True
+    timer = None
 
 def play_bombdodger():
     global window
@@ -61,7 +63,6 @@ def play_bombdodger():
     window = tkinter.Tk()
     window.geometry("620x650")
     layout_window(window)
-    update_clock()
     window.mainloop()
 
 def show_bombs_left():
@@ -104,7 +105,8 @@ def printfield(bombfield):
 
 def restart():
     global timer
-    window.after_cancel(timer)
+    if timer:
+        window.after_cancel(timer)
     window.destroy()
     play_bombdodger()
     window.mainloop()
@@ -203,6 +205,7 @@ def click(square, auto=False, click_flag=False):
             while bombfield[row][column] == 1:
                  create_bombfield()
             show_bombs_left()
+            update_clock()
 
         if warning in currentText:
             if click_flag==True:

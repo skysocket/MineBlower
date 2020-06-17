@@ -199,66 +199,68 @@ def click(square, auto=False, click_flag=False):
     global first_click
     global main_frame
 
+    if gameOver:
+        return
+    
     row = int(square.grid_info()["row"])
     column = int(square.grid_info()["column"])
 
     currentText = square.cget("text")
 
-    if gameOver == False:
-        if first_click:
-            #Ensure first click is never a bomb!
-            first_click = False
-            while bombfield[row][column] == 1:
-                 create_bombfield()
-            show_bombs_left()
-            update_clock()
+    if first_click:
+        #Ensure first click is never a bomb!
+        first_click = False
+        while bombfield[row][column] == 1:
+             create_bombfield()
+        show_bombs_left()
+        update_clock()
 
-        if warning in currentText:
-            if click_flag==True:
-                right_click(square)
-                click(square)
-        elif bombfield[row][column] == 1:
-            gameOver = True
-            red = "#FF6040"
-            for r in range(0,10):
-                for c in range(0,10):
-                    if bombfield[r][c] == 1:
-                        square_open(r, c, text=death, auto = (r != row or c != column))
+    if warning in currentText:
+        if click_flag==True:
+            right_click(square)
+            click(square)
+    elif bombfield[row][column] == 1:
+        gameOver = True
+        red = "#FF6040"
+        for r in range(0,10):
+            for c in range(0,10):
+                if bombfield[r][c] == 1:
+                    square_open(r, c, text=death, auto = (r != row or c != column))
 
-        elif currentText == "":
-            totalBombs = 0
+    elif currentText == "":
+        totalBombs = 0
+        
+        squares_around = surrounding_squares(row, column)
+        for r,c in squares_around:
+            totalBombs += bombfield[r][c]
+
+        if totalBombs != 0:
+            num_text = str(totalBombs)
+        else:
+            num_text = ""
             
-            squares_around = surrounding_squares(row, column)
-            for r,c in squares_around:
-                totalBombs += bombfield[r][c]
+        square_open(row, column, text = " " + num_text + " ", auto=False)   
 
-            if totalBombs != 0:
-                num_text = str(totalBombs)
-            else:
-                num_text = ""
-                
-            square_open(row, column, text = " " + num_text + " ", auto=False)   
+        squares_left = squares_left - 1
 
-            squares_left = squares_left - 1
+        check_game_over()
 
-            check_game_over()
-
-            if totalBombs == 0:
-                for r,c in squares_around:
-                    tk_square = square_to_widget(r, c)
-                    click(tk_square, auto=True, click_flag=True)
-        elif auto == False:  # clicking on a number
-            squares_around = surrounding_squares(row, column)
-            flag_count = 0
+        if totalBombs == 0:
             for r,c in squares_around:
                 tk_square = square_to_widget(r, c)
-                square_text = tk_square.cget("text")
-                if warning in square_text:
-                    flag_count = flag_count + 1   
-            if int(currentText) == flag_count:
-                for r,c in squares_around:
-                    tk_square = square_to_widget(r, c)
-                    click(tk_square, auto=True)
+                click(tk_square, auto=True, click_flag=True)
+    elif auto == False:  # clicking on a number
+        squares_around = surrounding_squares(row, column)
+        flag_count = 0
+        for r,c in squares_around:
+            tk_square = square_to_widget(r, c)
+            square_text = tk_square.cget("text")
+            if warning in square_text:
+                flag_count = flag_count + 1   
+        if int(currentText) == flag_count:
+            for r,c in squares_around:
+                tk_square = square_to_widget(r, c)
+                click(tk_square, auto=True)
                     
                     
 def on_right_click(event):
@@ -269,6 +271,9 @@ def right_click(square):
     global bombs_left
     global squares_left
     global first_click
+
+    if gameOver:
+        return
     
     currentText = square.cget("text")
 

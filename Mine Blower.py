@@ -76,11 +76,7 @@ def show_bombs_left():
     global bombs_left
     global first_click
 
-    if first_click:
-        # Never change number upon first click
-        number = "??"
-    else:
-        number = bombs_left
+    number = bombs_left
         
     bombs_label.config(text=death + str(number))
 
@@ -109,7 +105,6 @@ def create_bombfield():
             squares_left = squares_left + 1
         bombfield.append(rowList)
 
-    
     #printfield(bombfield)
 
 def printfield(bombfield):
@@ -271,8 +266,7 @@ def click(square, auto=False, click_flag=False):
         if int(currentText) == flag_count:
             for r,c in squares_around:
                 tk_square = square_to_widget(r, c)
-                click(tk_square, auto=True)
-                    
+                click(tk_square, auto=True)    
                     
 def on_right_click(event):
     square = event.widget

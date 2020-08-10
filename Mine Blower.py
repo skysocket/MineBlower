@@ -89,23 +89,21 @@ def create_bombfield():
     global bombfield
     global bombs_left
 
-    bombs_left = 0
-    squares_left = 0
-    bombfield = []
-
     rows = 10
     cols = 10
-    n_bombs = int(rows*cols*.16)  # 16% is a good default
+    bombs_left = int(rows*cols*.16)  # 16% is a good default
+    squares_left = 0
+    bombfield = []
+    
     bombs = list(range(rows*cols))
     random.shuffle(bombs)
-    bombs = bombs[0:n_bombs]
+    bombs = bombs[0:bombs_left]
 
     for row in range(0,rows):
         rowList = []
         for column in range(0,cols):
             if row*cols + column in bombs:
                 rowList.append(1)
-                bombs_left = bombs_left + 1
             else:
                 rowList.append(0)
             squares_left = squares_left + 1

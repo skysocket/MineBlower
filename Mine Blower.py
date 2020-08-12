@@ -255,7 +255,7 @@ def click(square, auto=False, click_flag=False):
             for r,c in squares_around:
                 tk_square = square_to_widget(r, c)
                 click(tk_square, auto=True, click_flag=True)
-    elif auto == False:  # clicking on a number
+    elif auto == False and currentText != "  ":  # clicking on a number
         squares_around = surrounding_squares(row, column)
         flag_count = 0
         for r,c in squares_around:
